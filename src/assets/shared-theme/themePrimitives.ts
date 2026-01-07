@@ -98,6 +98,19 @@ export const red = {
   900: 'hsl(0, 93%, 6%)',
 };
 
+export const purple = {
+  50: 'hsl(270, 100%, 95%)',
+  100: 'hsl(270, 100%, 92%)',
+  200: 'hsl(270, 100%, 80%)',
+  300: 'hsl(270, 100%, 65%)',
+  400: 'hsl(270, 98%, 48%)',
+  500: 'hsl(270, 98%, 42%)',
+  600: 'hsl(270, 98%, 55%)',
+  700: 'hsl(270, 100%, 35%)',
+  800: 'hsl(270, 100%, 16%)',
+  900: 'hsl(270, 100%, 21%)',
+};
+
 export const getDesignTokens = (mode: PaletteMode) => {
   customShadows[1] =
     mode === 'dark'
@@ -131,6 +144,18 @@ export const getDesignTokens = (mode: PaletteMode) => {
           dark: brand[900],
         }),
       },
+      secondary: {
+        light: purple[200],
+        main: purple[400],
+        dark: purple[700],
+        contrastText: gray[50],
+        ...(mode === 'dark' && {
+          contrastText: gray[50],
+          light: purple[300],
+          main: purple[400],
+          dark: purple[700],
+        }),
+      },
       warning: {
         light: orange[300],
         main: orange[400],
@@ -159,6 +184,16 @@ export const getDesignTokens = (mode: PaletteMode) => {
           light: green[400],
           main: green[500],
           dark: green[700],
+        }),
+      },
+      neutral: {
+        light: gray[200],
+        main: gray[400],
+        dark: gray[700],
+        ...(mode === 'dark' && {
+          light: gray[600],
+          main: gray[700],
+          dark: gray[800],
         }),
       },
       grey: {
@@ -256,6 +291,12 @@ export const colorSchemes = {
         dark: brand[600],
         contrastText: gray[50],
       },
+      secondary: {
+        light: purple[200],
+        main: purple[400],
+        dark: purple[700],
+        contrastText: gray[50],
+      },
       warning: {
         light: orange[300],
         main: orange[400],
@@ -270,6 +311,11 @@ export const colorSchemes = {
         light: green[300],
         main: green[400],
         dark: green[800],
+      },
+      neutral: {
+        light: gray[200],
+        main: gray[400],
+        dark: gray[700],
       },
       grey: {
         ...gray,
@@ -306,6 +352,12 @@ export const colorSchemes = {
         main: brand[700],
         dark: brand[900],
       },
+      secondary: {
+        light: purple[300],
+        main: purple[400],
+        dark: purple[700],
+        contrastText: gray[50],
+      },
       warning: {
         light: orange[400],
         main: orange[500],
@@ -320,6 +372,11 @@ export const colorSchemes = {
         light: green[400],
         main: green[500],
         dark: green[700],
+      },
+      neutral: {
+        light: gray[600],
+        main: gray[700],
+        dark: gray[800],
       },
       grey: {
         ...gray,

@@ -10,7 +10,6 @@ import Content from '../components/LoginContent';
 
 const ColorModeSwitch = () => {
   const { mode, setMode } = useColorScheme();
-
   const handleToggle = () => {
     setMode(mode === 'light' ? 'dark' : 'light');
   };
@@ -18,7 +17,6 @@ const ColorModeSwitch = () => {
   return (
     <IconButton 
       onClick={handleToggle}
-      color="primary"
       sx={{
         position: 'fixed',
         top: '1rem',
@@ -26,6 +24,7 @@ const ColorModeSwitch = () => {
         borderRadius: 2,
         border: 1,
         borderColor: 'divider',
+        color: mode === 'dark' ? 'common.white' : 'common.black',
       }}
     >
       {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}

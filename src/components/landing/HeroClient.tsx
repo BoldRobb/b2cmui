@@ -1,4 +1,4 @@
-import { Card,  Avatar } from '@mui/material';
+import { Card,  Avatar, Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -10,9 +10,11 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { useNavigate } from 'react-router-dom';
+import { useDocumentTitle } from '../../hooks/useTitle';
 
-export default function Hero() {
+export default function HeroClient() {
   const navigate = useNavigate();
+  const {version, titulo} = useDocumentTitle();
   return (
     <Box
       id="hero"
@@ -52,29 +54,37 @@ export default function Hero() {
             }}
           >
             Bienvenido a&nbsp;
+            {titulo ? (
+              <Typography
+                component="span"
+                variant="h1"
+                sx={(theme) => ({
+                  fontSize: 'inherit',
+                  color: 'primary.main',
+                  ...theme.applyStyles('dark', {
+                    color: 'primary.light',
+                  }),
+                })}
+              >
+                {titulo}
+              </Typography>
+            ) : (
+              <Skeleton variant="text" width={200} height={50} />
+            )}
+          </Typography>
+          {version ? (
             <Typography
-              component="span"
-              variant="h1"
-              sx={(theme) => ({
-                fontSize: 'inherit',
-                color: 'primary.main',
-                ...theme.applyStyles('dark', {
-                  color: 'primary.light',
-                }),
-              })}
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
             >
-              Macronnect
+              Version: {version}
             </Typography>
-          </Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            Version: 1.x.x
-          </Typography>
+          ) : (
+            <Skeleton variant="text" width={150} height={24} />
+          )}
           <Typography
           variant='h2'
             sx={{

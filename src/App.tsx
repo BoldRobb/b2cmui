@@ -4,10 +4,31 @@ import LandingPage from './pages/Landing';
 import AppLayout from './pages/layout/AppLayout';
 import AppTheme from './assets/shared-theme/AppTheme';
 import DashboardPage from './pages/Dashboard.tsx/Dashboard';
-import FacturasPage from './pages/Facturas';
+import FacturasPage from './pages/documentos.tsx/Facturas';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import PagosPage from './pages/documentos.tsx/Pagos';
+import NotasDevolucionPage from './pages/documentos.tsx/Notas-devolucion';
+import FacturasServiciosPage from './pages/documentos.tsx/Facturas-servicios';
+import OtrosDocumentosPage from './pages/documentos.tsx/Otros-documentos';
+import NotificationSnackbar from './components/common/NotificationSnackbar';
+import { ErrorNotifier } from './api/errorHandler';
 
 function App() {
+
+  const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    }
+  }
+
+});
+
   return (
+    <QueryClientProvider client={queryClient}>
     <AppTheme>
       <BrowserRouter>
         <Routes>
@@ -20,11 +41,20 @@ function App() {
             <Route path="landing" element={<LandingPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="facturas" element={<FacturasPage />} />
+            <Route path="pagos" element={<PagosPage />} />
+            <Route path="notas-devolucion" element={<NotasDevolucionPage />} />
+            <Route path="facturas-servicios" element={<FacturasServiciosPage />} />
+            <Route path="otros-documentos" element={<OtrosDocumentosPage />} />
+            
             {/* Aquí puedes agregar más rutas que usen el layout */}
           </Route>
         </Routes>
       </BrowserRouter>
+      <NotificationSnackbar />
+      <ErrorNotifier  />
+      <ReactQueryDevtools initialIsOpen={false} />
     </AppTheme>
+    </QueryClientProvider>
   );
 }
 

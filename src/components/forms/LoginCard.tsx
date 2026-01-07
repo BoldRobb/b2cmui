@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
+import Alert from '@mui/material/Alert';
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
@@ -12,6 +13,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import { useState } from 'react';
+import { apiAuth } from '../../api/apiAuth';
+import { apiToken } from '../../api/ApiToken';
+import { Collapse, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -33,27 +39,45 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 export default function LoginCard() {
   const navigate = useNavigate();
-  const [usernameError, setUsernameError] = React.useState(false);
-  const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [usernameError, setUsernameError] = useState(false);
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | undefined>(undefined);
+  const [showLoginError, setShowLoginError] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setShowLoginError(false);
     event.preventDefault();
-    
     if (!validateInputs()) {
       return;
     }
-    
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
-    
-    // Navegar al layout con AppBar después del login exitoso
-    navigate('/app/landing');
+    try{
+      setLoading(true);
+      const response = await apiAuth.login({
+        username: data.get('username') as string,
+        password: data.get('password') as string,
+      });
+
+      apiToken.setToken(response.token, data.get('remember') === 'on' || false);
+      navigate('/app/landing');
+
+    }catch (error) {
+      console.error('Login error:', error);
+      setShowLoginError(true);
+      
+      if (error instanceof Error) {
+        
+        setLoginError(error.message== 'No autorizado' ? 'Credenciales incorrectas.' : error.message );
+      } else {
+        setLoginError("Error desconocido");
+      }
+    } 
+    setLoading(false);
   };
+  
 
 
 
@@ -94,6 +118,34 @@ export default function LoginCard() {
       >
         Iniciar Sesión
       </Typography>
+      
+        
+        <Collapse in={showLoginError}>
+        <Alert
+        severity='warning'
+          action={
+            <IconButton
+              aria-label="cerrar"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setShowLoginError(false);
+              }}
+              sx={{ backgroundColor: 'transparent !important', borderColor: 'transparent !important', padding: 0 }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{
+            '& .MuiAlert-action': {
+              padding: 0
+            }
+          }}
+        >
+          {loginError}
+        </Alert>
+      </Collapse>
+      
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -140,7 +192,7 @@ export default function LoginCard() {
           control={<Checkbox value="remember" color="primary" />}
           label="Recuérdame"
         />
-        <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+        <Button type="submit" loading={loading} fullWidth variant="contained" onClick={validateInputs} >
           Iniciar Sesión
         </Button>
       </Box>
@@ -150,6 +202,7 @@ export default function LoginCard() {
           fullWidth
           variant="outlined"
           onClick={() => alert('Facturación en linea')}
+          loading={loading}
           startIcon={
             <ArticleOutlinedIcon />
           }

@@ -6,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import Menu from '@mui/material/Menu';
@@ -14,6 +13,9 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -24,6 +26,12 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useColorScheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import {useLogoUrl} from '../../hooks/useLogo';
+import { useCliente } from '../../hooks/useClienteData';
+import { apiToken } from '../../api/ApiToken';
+import { usePublicacionCache } from '../../hooks/usePublicacionCache';
+import { useQueryClient } from '@tanstack/react-query';
+import AccountBox from '@mui/icons-material/AccountBox';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -51,11 +59,12 @@ const ColorModeSwitch = () => {
   return (
     <IconButton 
       onClick={handleToggle}
-      color="primary"
+      
       sx={{
         borderRadius: 1,
         border: 1,
         borderColor: 'divider',
+        color: mode === 'dark' ? 'common.white' : 'common.black',
       }}
     >
       {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -64,15 +73,25 @@ const ColorModeSwitch = () => {
 };
 
 export default function AppAppBar() {
+  const { data: cliente } = useCliente();
+  const isAdmin = apiToken.isAdmin();
+  const { clearCache } = usePublicacionCache();
+  const queryClient = useQueryClient();
+  const { data: logoClaro } = useLogoUrl('fondo-claro'); // React Query para el logo
+  const { data: logoOscuro } = useLogoUrl('fondo-oscuro'); // React Query para el logo
   const [open, setOpen] = React.useState(false);
   const [documentosAnchor, setDocumentosAnchor] = React.useState<null | HTMLElement>(null);
   const [consultasAnchor, setConsultasAnchor] = React.useState<null | HTMLElement>(null);
   const [ecommerceAnchor, setEcommerceAnchor] = React.useState<null | HTMLElement>(null);
+  const [profileAnchor, setProfileAnchor] = React.useState<null | HTMLElement>(null);
+  
   const [documentosOpenMobile, setDocumentosOpenMobile] = React.useState(false);
   const [consultasOpenMobile, setConsultasOpenMobile] = React.useState(false);
   const [ecommerceOpenMobile, setEcommerceOpenMobile] = React.useState(false);
   const navigate = useNavigate();
   const { mode } = useColorScheme();
+
+  const displayName = cliente?.nombre || 'Cliente';
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -88,6 +107,40 @@ export default function AppAppBar() {
 
   const handleEcommerceClick = (event: React.MouseEvent<HTMLElement>) => {
     setEcommerceAnchor(event.currentTarget);
+  };
+
+  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileAnchor(event.currentTarget);
+  };
+
+  const handleProfileClose = () => setProfileAnchor(null);
+  const renderMainBox = () =>{
+    return(
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <img 
+                src={mode === 'dark' ? logoOscuro : logoClaro} 
+                alt="Logo" 
+                style={{ height: '32px' }}
+              />
+              <IconButton 
+                color="info"
+                onClick={() => navigate('/app/landing')}
+                sx={{
+                  border: 0,                  
+                  color: mode === 'dark' ? 'common.white' : 'common.black',
+                }}
+              >
+                <HomeIcon fontSize="small" />
+              </IconButton>
+            </Box>
+    )
+  }
+  const handleLogout = () => {
+    handleProfileClose();
+    apiToken.removeToken();
+    clearCache();
+    queryClient.clear();
+    navigate('/login');
   };
 
   const handleCloseMenus = () => {
@@ -108,24 +161,10 @@ export default function AppAppBar() {
       }}
     >
       <Container maxWidth="lg">
+        {!isAdmin && (
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0, gap: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <img 
-                src={mode === 'dark' ? '/macronnect-logo.png' : '/macronnect-logo-color.png'} 
-                alt="Macronnect Logo" 
-                style={{ height: '32px' }}
-              />
-              <IconButton 
-                color="info"
-                onClick={() => navigate('/app/landing')}
-                sx={{
-                  border: 0,
-                }}
-              >
-                <HomeIcon fontSize="small" />
-              </IconButton>
-            </Box>
+            {renderMainBox()}
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small"
                 onClick={() => navigate('/app/dashboard')}
@@ -160,10 +199,10 @@ export default function AppAppBar() {
                 }}
               >
                 <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/facturas'); }}>Facturas</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Notas de Devolución</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Pagos</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Otros Documentos</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Facturas de Servicios</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/notas-devolucion'); }}>Notas de Devolución</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/pagos'); }}>Pagos</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/otros-documentos'); }}>Otros Documentos</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/facturas-servicios'); }}>Facturas de Servicios</MenuItem>
               </Menu>
               <Button 
                 variant="text" 
@@ -240,9 +279,54 @@ export default function AppAppBar() {
             <Button color="primary" variant="text" size="small">
               Carrito
             </Button>
-            <Button color="primary" variant="contained" size="small">
-              Perfil
-            </Button>
+            <Tooltip title="Perfil">
+              <IconButton
+                onClick={handleProfileClick}
+                aria-label="perfil"
+                sx={{
+                  p: 0.5,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Avatar
+                  alt={displayName}
+                  sx={{ width: 32, height: 32, backgroundColor: 'transparent', color: 'inherit' }}
+                >
+                  <AccountBox />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={profileAnchor}
+              open={Boolean(profileAnchor)}
+              onClose={handleProfileClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    mt: 1,
+                    minWidth: 220,
+                    backdropFilter: 'blur(12px)',
+                    backgroundColor: (theme) => theme.vars
+                      ? `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`
+                      : alpha(theme.palette.background.paper, 0.8),
+                    border: '1px solid',
+                    borderColor: 'divider',
+                  },
+                },
+              }}
+            >
+              <MenuItem disabled sx={{ opacity: 1, fontWeight: 600 }}>
+                {displayName}
+              </MenuItem>
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem onClick={() => { handleProfileClose(); navigate('/app/ordenes'); }}>
+                Mis ordenes
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+            </Menu>
             <ColorModeSwitch />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -342,14 +426,23 @@ export default function AppAppBar() {
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Perfil
+                  <Button color="primary" variant="outlined" fullWidth onClick={handleLogout}>
+                    Cerrar sesión
                   </Button>
                 </MenuItem>
               </Box>
             </Drawer>
           </Box>
         </StyledToolbar>
+        )}
+        {isAdmin && (
+          <StyledToolbar variant="dense" disableGutters>
+            <Box>
+              {renderMainBox()}
+            </Box>
+          </StyledToolbar>
+
+        )}
       </Container>
     </AppBar>
   );

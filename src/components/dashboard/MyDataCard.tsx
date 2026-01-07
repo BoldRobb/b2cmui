@@ -1,16 +1,19 @@
-import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
+import { Card, CardContent, Typography, Box, Stack, Skeleton } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import BadgeIcon from '@mui/icons-material/Badge';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useDashboardData } from '../../hooks/useClienteData';
 
 interface DataRowProps {
   label: string;
   value: string;
   icon: React.ReactNode;
+  isLoading?: boolean;
 }
 
-function DataRow({ label, value, icon }: DataRowProps) {
+function DataRow({ label, value, icon, isLoading = false }: DataRowProps) {
+
   return (
     <Box 
       sx={{ 
@@ -23,7 +26,7 @@ function DataRow({ label, value, icon }: DataRowProps) {
         transition: 'all 0.2s',
         '&:hover': {
           backgroundColor: (theme) => theme.palette.mode === 'dark'
-            ? 'rgba(255, 255, 255, 0.08)'
+            ? 'rgba(153, 86, 86, 0.08)'
             : 'rgba(0, 0, 0, 0.04)',
           transform: 'translateY(-2px)',
           boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -53,23 +56,35 @@ function DataRow({ label, value, icon }: DataRowProps) {
           {label}
         </Typography>
       </Box>
-      <Typography 
-        variant="body2" 
-        sx={{ 
-          color: 'text.primary',
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          lineHeight: 1.5,
-          pl: 4
-        }}
-      >
-        {value}
-      </Typography>
+      {isLoading ? (
+        <Skeleton 
+          variant="text" 
+          width="70%" 
+          height={20}
+          sx={{ ml: 4, borderRadius: 1 }}
+        />
+      ) : (
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            color: 'text.primary',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            lineHeight: 1.5,
+            pl: 4
+          }}
+        >
+          {value}
+        </Typography>
+      )}
     </Box>
   );
 }
 
 export default function MyDataCard() {
+
+  const {direccion, cliente, isLoading} = useDashboardData();
+
   return (
     <Card 
       sx={{ 
@@ -98,23 +113,27 @@ export default function MyDataCard() {
         <Stack spacing={0}>
           <DataRow
             label="Nombre"
-            value="SERVICIO PAN AMERICANO DE PROTECCION. S A DE C V"
+            value={cliente?.nombre || ''}
             icon={<PersonIcon sx={{ fontSize: 20 }} />}
+            isLoading={isLoading}
           />
           <DataRow 
             label="Código" 
-            value="000010"
+            value={cliente?.clave || ''}
             icon={<BadgeIcon sx={{ fontSize: 20 }} />}
+            isLoading={isLoading}
           />
           <DataRow 
             label="RFC" 
-            value="SPA810429PU2"
+            value={cliente?.rfc || ''}
             icon={<FingerprintIcon sx={{ fontSize: 20 }} />}
+            isLoading={isLoading}
           />
           <DataRow 
             label="Dirección" 
-            value="25,CIUDAD DE MEXICO,CIUDAD DE MÉXICO"
+            value={direccion || ''}
             icon={<LocationOnIcon sx={{ fontSize: 20 }} />}
+            isLoading={isLoading}
           />
         </Stack>
       </CardContent>
