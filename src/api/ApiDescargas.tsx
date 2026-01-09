@@ -141,6 +141,7 @@ class ApiDescargas{
         tipoDescarga: string,
         filename?: string
     ): Promise<void> {
+        console.log('Iniciando descarga del documento...');
         const loadingKey = notificationService.loading('Iniciando descarga...');
         try {
             const blob = await this.descargarDocumento(tipoDocumento, documentoId, tipoDescarga);

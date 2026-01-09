@@ -128,6 +128,7 @@ export default function AppAppBar() {
                 sx={{
                   border: 0,                  
                   color: mode === 'dark' ? 'common.white' : 'common.black',
+                  backgroundColor: 'transparent !important',
                 }}
               >
                 <HomeIcon fontSize="small" />
@@ -231,9 +232,9 @@ export default function AppAppBar() {
                   }
                 }}
               >
-                <MenuItem onClick={handleCloseMenus}>Antigüedad de Saldos</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Pedidos</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Cotizaciones</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/antiguedad-saldos'); }}>Antigüedad de Saldos</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/pedidos'); }}>Pedidos</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/cotizaciones'); }}>Cotizaciones</MenuItem>
               </Menu>
               <Button 
                 variant="text" 

@@ -145,6 +145,7 @@ export default function HeroClient() {
           </Card>
 
           <Card 
+            onClick={() => navigate('/app/antiguedad-saldos')}
             sx={{ p: 3, cursor: 'pointer', transition: 'all 0.2s', '&:hover': { boxShadow: 4, transform: 'translateY(-4px)' } }}
           >
             <Box sx={{ display: 'flex', gap: 2 }}>
@@ -163,6 +164,7 @@ export default function HeroClient() {
           </Card>
 
           <Card 
+          onClick={() => navigate('/app/cotizaciones')}
             sx={{ p: 3, cursor: 'pointer', transition: 'all 0.2s', '&:hover': { boxShadow: 4, transform: 'translateY(-4px)' } }}
           >
             <Box sx={{ display: 'flex', gap: 2 }}>

@@ -30,8 +30,12 @@ class NotificationService {
   }
 
   error(message: string) {
+    const displayMessage = message.includes('Su sesión es inválida') 
+      ? 'No se pudo conectar con el servidor. Por favor, intente nuevamente más tarde.'
+      : message;
+    
     this.notify({
-      message,
+      message: displayMessage,
       variant: 'error',
       key: Date.now().toString(),
     });

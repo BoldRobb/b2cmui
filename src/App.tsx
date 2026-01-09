@@ -11,8 +11,12 @@ import PagosPage from './pages/documentos.tsx/Pagos';
 import NotasDevolucionPage from './pages/documentos.tsx/Notas-devolucion';
 import FacturasServiciosPage from './pages/documentos.tsx/Facturas-servicios';
 import OtrosDocumentosPage from './pages/documentos.tsx/Otros-documentos';
+import AntiguedadSaldosPage from './pages/consultas/AntiguedadSaldos';
 import NotificationSnackbar from './components/common/NotificationSnackbar';
 import { ErrorNotifier } from './api/errorHandler';
+import PedidosPage from './pages/consultas/Pedidos';
+import CotizacionesPage from './pages/consultas/Cotizaciones';
+import OrdenesPage from './pages/ecommerce/Ordenes';
 
 function App() {
 
@@ -38,15 +42,26 @@ function App() {
           {/* Rutas con AppBar */}
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<Navigate to="/app/landing" replace />} />
+
+            {/* Paginas principales */}
             <Route path="landing" element={<LandingPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+
+            {/* Paginas de documentos */}
             <Route path="facturas" element={<FacturasPage />} />
             <Route path="pagos" element={<PagosPage />} />
             <Route path="notas-devolucion" element={<NotasDevolucionPage />} />
             <Route path="facturas-servicios" element={<FacturasServiciosPage />} />
             <Route path="otros-documentos" element={<OtrosDocumentosPage />} />
-            
-            {/* Aquí puedes agregar más rutas que usen el layout */}
+
+            {/* Paginas de consultas */}
+            <Route path="antiguedad-saldos" element={<AntiguedadSaldosPage />} />
+            <Route path="pedidos" element={<PedidosPage />} />
+            <Route path="cotizaciones" element={<CotizacionesPage />} />
+
+            {/*E-commerce*/}
+            <Route path="ordenes" element={<OrdenesPage />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

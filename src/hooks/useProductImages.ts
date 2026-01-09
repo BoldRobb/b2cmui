@@ -1,4 +1,4 @@
-import { apiImages } from "@/api/apiImages";
+import { apiImages } from "../api/apiImages";
 import { useQuery } from "@tanstack/react-query";
 
 const useImageUrl = (publicacionId?: number, imageName?: string | null) => {

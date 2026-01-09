@@ -2,11 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { apiDocumentos } from '../api/ApiDocumentos';
 import { apiToken } from '../api/ApiToken';
 import { apiCotizaciones } from '../api/apiCotizaciones';
-import { apiPedidos } from '../api/ApiPedidos';
-import { apiOrdenes } from '../api/ApiOrdenes';
 import type { DocumentosQueryParams } from '../types/DocumentosInterface';
-
-type TipoDocumento = 'facturas' | 'notas-devolucion' | 'pagos' | 'otros-documentos' | 'facturas-servicios';
+import {apiPedidos} from '../api/apiPedidos';
+type TipoDocumento = 'facturas' | 'notas-devolucion' | 'pagos' | 'otros-documentos' |'pedidos'|'cotizaciones'| 'facturas-servicios';
 
 export function useTiposOperacion() {
   return useQuery({
@@ -25,6 +23,8 @@ export function useDocumentosBase(tipo: TipoDocumento) {
       'notas-devolucion': apiDocumentos.getNotasDevolucion.bind(apiDocumentos),
       'otros-documentos': apiDocumentos.getOtrosDocumentos.bind(apiDocumentos),
       'facturas-servicios': apiDocumentos.getFacturasServicios.bind(apiDocumentos),
+      'pedidos': apiPedidos.getPedidos.bind(apiPedidos),
+      'cotizaciones': apiCotizaciones.getCotizaciones.bind(apiCotizaciones),
     };
     return methods[tipoDoc];
   };
@@ -84,37 +84,5 @@ export function useCotizacionesBase() {
     },
     enabled: apiToken.isAuthenticated() && !apiToken.isAdmin(),
     staleTime: 1000 * 60 * 3, 
-  });
-}
-
-export function usePedidosBase() {
-  return useQuery({
-    queryKey: ['pedidos', 'base'],
-    queryFn: async () => {
-      
-      const queryParams: DocumentosQueryParams = {
-        page: 1,
-        size: 10,
-        sort: 'fecha,desc'
-      };
-      return apiPedidos.getPedidos('', queryParams);
-    },
-    enabled: apiToken.isAuthenticated() && !apiToken.isAdmin(),
-    staleTime: 1000 * 60 * 3, 
-  });
-}
-
-export function useOrdenesBase() {
-  return useQuery({
-    queryKey: ['ordenes', 'base'],
-    queryFn: async () => {
-      return apiOrdenes.getOrdenes({ 
-        page: 1, 
-        size: 10, 
-        sort: 'fechaCreacion,DESC' 
-      });
-    },
-    enabled: apiToken.isAuthenticated() && !apiToken.isAdmin(),
-    staleTime: 1000 * 60 * 1, 
   });
 }

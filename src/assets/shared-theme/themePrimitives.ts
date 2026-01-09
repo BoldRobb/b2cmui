@@ -7,6 +7,19 @@ declare module '@mui/material/Paper' {
     highlighted: true;
   }
 }
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    thirdary: true;
+  }
+}
+
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    thirdary: true;
+  }
+}
+
 declare module '@mui/material/styles' {
   interface ColorRange {
     50: string;
@@ -26,6 +39,11 @@ declare module '@mui/material/styles' {
 
   interface Palette {
     baseShadow: string;
+    thirdary: PaletteColor;
+  }
+
+  interface PaletteOptions {
+    thirdary?: PaletteColor;
   }
 }
 
@@ -110,6 +128,83 @@ export const purple = {
   800: 'hsl(270, 100%, 16%)',
   900: 'hsl(270, 100%, 21%)',
 };
+export const blue = {
+  50: 'hsl(210, 100%, 95%)',
+  100: 'hsl(210, 100%, 90%)',
+  200: 'hsl(210, 100%, 80%)',
+  300: 'hsl(210, 100%, 70%)',
+  400: 'hsl(210, 100%, 60%)',
+  500: 'hsl(210, 100%, 50%)',
+  600: 'hsl(210, 100%, 40%)',
+  700: 'hsl(210, 100%, 30%)',
+  800: 'hsl(210, 100%, 20%)',
+  900: 'hsl(210, 100%, 10%)',
+};
+
+export const yellow = {
+  50: 'hsl(54, 100%, 95%)',
+  100: 'hsl(54, 100%, 90%)',
+  200: 'hsl(54, 100%, 80%)',
+  300: 'hsl(54, 100%, 70%)',
+  400: 'hsl(54, 100%, 60%)',
+  500: 'hsl(54, 100%, 50%)',
+  600: 'hsl(54, 100%, 40%)',
+  700: 'hsl(54, 100%, 30%)',
+  800: 'hsl(54, 100%, 20%)',
+  900: 'hsl(54, 100%, 10%)',
+};
+
+export const pink = {
+  50: 'hsl(330, 100%, 95%)',
+  100: 'hsl(330, 100%, 90%)',
+  200: 'hsl(330, 100%, 80%)',
+  300: 'hsl(330, 100%, 70%)',
+  400: 'hsl(330, 90%, 60%)',
+  500: 'hsl(330, 90%, 50%)',
+  600: 'hsl(330, 90%, 40%)',
+  700: 'hsl(330, 90%, 30%)',
+  800: 'hsl(330, 90%, 20%)',
+  900: 'hsl(330, 90%, 10%)',
+};
+
+export const teal = {
+  50: 'hsl(180, 100%, 95%)',
+  100: 'hsl(180, 100%, 90%)',
+  200: 'hsl(180, 100%, 80%)',
+  300: 'hsl(180, 80%, 70%)',
+  400: 'hsl(180, 70%, 50%)',
+  500: 'hsl(180, 80%, 40%)',
+  600: 'hsl(180, 90%, 30%)',
+  700: 'hsl(180, 95%, 20%)',
+  800: 'hsl(180, 100%, 15%)',
+  900: 'hsl(180, 100%, 10%)',
+};
+
+export const cyan = {
+  50: 'hsl(190, 100%, 95%)',
+  100: 'hsl(190, 100%, 90%)',
+  200: 'hsl(190, 100%, 80%)',
+  300: 'hsl(190, 90%, 70%)',
+  400: 'hsl(190, 80%, 50%)',
+  500: 'hsl(190, 90%, 40%)',
+  600: 'hsl(190, 95%, 30%)',
+  700: 'hsl(190, 100%, 25%)',
+  800: 'hsl(190, 100%, 15%)',
+  900: 'hsl(190, 100%, 10%)',
+};
+
+export const indigo = {
+  50: 'hsl(230, 100%, 95%)',
+  100: 'hsl(230, 100%, 90%)',
+  200: 'hsl(230, 100%, 80%)',
+  300: 'hsl(230, 90%, 70%)',
+  400: 'hsl(230, 80%, 60%)',
+  500: 'hsl(230, 85%, 50%)',
+  600: 'hsl(230, 90%, 40%)',
+  700: 'hsl(230, 95%, 30%)',
+  800: 'hsl(230, 100%, 20%)',
+  900: 'hsl(230, 100%, 15%)',
+};
 
 export const getDesignTokens = (mode: PaletteMode) => {
   customShadows[1] =
@@ -145,15 +240,27 @@ export const getDesignTokens = (mode: PaletteMode) => {
         }),
       },
       secondary: {
-        light: purple[200],
-        main: purple[400],
-        dark: purple[700],
-        contrastText: gray[50],
+        light: purple[100],
+        main: purple[300],
+        dark: purple[600],
+        contrastText: purple[50],
         ...(mode === 'dark' && {
-          contrastText: gray[50],
-          light: purple[300],
-          main: purple[400],
-          dark: purple[700],
+          contrastText: purple[300],
+          light: purple[500],
+          main: purple[700],
+          dark: purple[900],
+        }),
+      },
+      thirdary: {
+        light: cyan[100],
+        main: cyan[300],
+        dark: cyan[600],
+        contrastText: cyan[50],
+        ...(mode === 'dark' && {
+          contrastText: cyan[300],
+          light: cyan[500],
+          main: cyan[700],
+          dark: cyan[900],
         }),
       },
       warning: {
@@ -297,6 +404,12 @@ export const colorSchemes = {
         dark: purple[700],
         contrastText: gray[50],
       },
+      thirdary: {
+        light: cyan[200],
+        main: cyan[400],
+        dark: cyan[700],
+        contrastText: cyan[50],
+      },
       warning: {
         light: orange[300],
         main: orange[400],
@@ -357,6 +470,12 @@ export const colorSchemes = {
         main: purple[400],
         dark: purple[700],
         contrastText: gray[50],
+      },
+      thirdary: {
+        light: cyan[300],
+        main: cyan[400],
+        dark: cyan[700],
+        contrastText: cyan[50],
       },
       warning: {
         light: orange[400],
