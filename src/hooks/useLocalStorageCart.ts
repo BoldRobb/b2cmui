@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { message } from 'antd';
-import { localStorageCartService } from '@/services/LocalStorageCartService';
-import type { CarroItem, CarroResponse } from '@/types/CarritoInterface';
-import type { Publicacion } from '@/types/PedidosInterface';
-import { apiToken } from '@/api/ApiToken';
+import { localStorageCartService } from '../services/LocalStorageCartService';
+import type { CarroItem, CarroResponse } from '../types/CarritoInterface';
+import type { Publicacion } from '../types/PedidosInterface';
+import { apiToken } from '../api/ApiToken';
+import { notificationService } from '../services/notificationService';
 
 
 interface UseCartReturn {
-  // Estados
+  // Estados  
   items: CarroItem[];
   publicaciones: Map<number, Publicacion>;
   loading: boolean;
@@ -85,14 +85,14 @@ export const useLocalStorageCart = (): UseCartReturn => {
       const response: CarroResponse = await localStorageCartService.agregarProducto(publicacionId, cantidad);
       
       if (response.exito) {
-        message.success(response.mensaje);
+        notificationService.success(response.mensaje);
         await loadCartData(); 
       } else {
-        message.warning(response.mensaje);
+        notificationService.warning(response.mensaje);
       }
     } catch (error) {
       console.error('LocalStorage Cart - Error adding to cart:', error);
-      message.error('Error al agregar al carrito');
+      notificationService.error('Error al agregar al carrito');
     } finally {
       setLoading(false);
     }
@@ -105,16 +105,16 @@ export const useLocalStorageCart = (): UseCartReturn => {
       const response: CarroResponse = await localStorageCartService.actualizarCantidad(publicacionId, cantidad);
       
       if (response.exito) {
-        message.success(response.mensaje);
+        notificationService.success(response.mensaje);
         await loadCartData();
         return response.datos;
       } else {
-        message.warning(response.mensaje);
+        notificationService.warning(response.mensaje);
         await loadCartData();
       }
     } catch (error) {
       console.error('LocalStorage Cart - Error updating quantity:', error);
-      message.error('Error al actualizar cantidad');
+      notificationService.error('Error al actualizar cantidad');
     } finally {
       setLoading(false);
     }
@@ -125,11 +125,11 @@ export const useLocalStorageCart = (): UseCartReturn => {
     try {
       setLoading(true);
       await localStorageCartService.eliminarProducto(publicacionId);
-      message.success('Producto eliminado del carrito');
+      notificationService.success('Producto eliminado del carrito');
       await loadCartData();
     } catch (error) {
       console.error('LocalStorage Cart - Error removing from cart:', error);
-      message.error('Error al eliminar del carrito');
+      notificationService.error('Error al eliminar del carrito');
     } finally {
       setLoading(false);
     }
@@ -143,11 +143,11 @@ export const useLocalStorageCart = (): UseCartReturn => {
       setPublicaciones(new Map());
       setCount(0);
 
-      message.success('Carrito vaciado');
+      notificationService.success('Carrito vaciado');
       await loadCartData();
     } catch (error) {
       console.error('LocalStorage Cart - Error clearing cart:', error);
-      message.error('Error al vaciar carrito');
+      notificationService.error('Error al vaciar carrito');
     } finally {
       setLoading(false);
     }
@@ -196,13 +196,13 @@ export const useLocalStorageCart = (): UseCartReturn => {
       setLoading(true);
       const response: CarroResponse = await localStorageCartService.reordenar(ordenId);
       if (response.exito) {
-        message.success('Productos añadidos con éxito');
+        notificationService.success('Productos añadidos con éxito');
         await loadCartData();
       }
 
     } catch (error) {
       console.error('LocalStorage Cart - Error reordering:', error);
-      message.error('Error al reordenar');
+      notificationService.error('Error al reordenar');
     } finally {
       setLoading(false);
     }

@@ -17,6 +17,8 @@ import { ErrorNotifier } from './api/errorHandler';
 import PedidosPage from './pages/consultas/Pedidos';
 import CotizacionesPage from './pages/consultas/Cotizaciones';
 import OrdenesPage from './pages/ecommerce/Ordenes';
+import { CartProvider } from './context/CartContext';
+import CatalogoPage from './pages/ecommerce/Catalogo';
 
 function App() {
 
@@ -34,6 +36,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
     <AppTheme>
+      <CartProvider>
+        
+      
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -60,6 +65,7 @@ function App() {
             <Route path="cotizaciones" element={<CotizacionesPage />} />
 
             {/*E-commerce*/}
+            <Route path="catalogo" element={<CatalogoPage />} />
             <Route path="ordenes" element={<OrdenesPage />} />
 
           </Route>
@@ -67,6 +73,7 @@ function App() {
       </BrowserRouter>
       <NotificationSnackbar />
       <ErrorNotifier  />
+      </CartProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </AppTheme>
     </QueryClientProvider>

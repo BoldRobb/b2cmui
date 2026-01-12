@@ -1,8 +1,8 @@
-import { apiOrdenes } from '@/api/ApiOrdenes';
-import { apiCatalogo } from '@/api/ApiCatalogo';
-import { apiToken } from '@/api/ApiToken';
-import type { CarroItem, CarroResponse } from '@/types/CarritoInterface';
-import type { Publicacion } from '@/types/PedidosInterface';
+import { apiOrdenes } from '../api/ApiOrdenes';
+import { apiCatalogo } from '../api/ApiCatalogo';
+import { apiToken } from '../api/ApiToken';
+import type { CarroItem, CarroResponse } from '../types/CarritoInterface';
+import type { Publicacion } from '../types/PedidosInterface';
 import { publicacionCacheService } from './PublicacionCacheService';
 
 interface CarroStorage {
@@ -27,7 +27,7 @@ class LocalStorageCartService {
         
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload.userId || payload.id || 0;
+            return payload.sub || payload.id || 0;
         } catch {
             return 0;
         }

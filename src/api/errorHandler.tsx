@@ -2,9 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import { IconButton } from '@mui/material';
+import { alpha, IconButton, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 const ERROR_EVENT = 'app-connection-error';
+
+
+
+
 
 type ErrorPayload = {
 	message: string;
@@ -43,9 +47,24 @@ export const errorHandler = new ErrorHandler();
 
 // Componente global que escucha los eventos y muestra el Snackbar + Alert de MUI
 export function ErrorNotifier() {
+	const theme = useTheme();
 	const [open, setOpen] = useState(false);
 	const [payload, setPayload] = useState<ErrorPayload | null>(null);
 
+
+
+	  // Función para obtener el color del tema
+  const getColor = (colorPath: string) => {
+    const paths = colorPath.split('.');
+    let value: any = theme.palette;
+    for (const path of paths) {
+      value = value[path];
+      if (!value) return theme.palette.info.light;
+    }
+    // Asegurar que siempre devuelve una string
+    return typeof value === 'string' ? value : theme.palette.info.light;
+  };
+  
 	const handleClose = (_?: unknown, reason?: string) => {
 		if (reason === 'clickaway') return;
 		setOpen(false);
@@ -81,11 +100,11 @@ export function ErrorNotifier() {
               onClick={() => {
                 setOpen(false);
               }}
-              sx={{ backgroundColor: 'transparent !important', borderColor: 'transparent !important', padding: 0 }}
+              sx={{ color: 'inherit !important', backgroundColor: 'transparent !important', borderColor: 'transparent !important', padding: 0 }}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
-          } severity="error" variant="filled" sx={{ alignItems: 'flex-start' }}>
+          } severity="error" variant="filled" sx={{ width: '100%', backgroundColor: `${alpha(getColor('error.main'), 0.5)} !important` }}	>
 				{payload?.message && <AlertTitle>{payload.message}</AlertTitle>}
 				{payload?.description}
 			</Alert>

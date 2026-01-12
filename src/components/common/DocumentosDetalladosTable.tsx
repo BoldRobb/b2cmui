@@ -68,7 +68,7 @@ export default function DocumentosDetalladosTable({ tipo }: DocumentoDetalladoTa
 
     const { data: documentosBase, isLoading: isLoadingBase } = useDocumentosBase(tipo);
 
-      const [documentos, setDocumentos] = useState<Documento[]>(documentosBase?.content || []);
+      const [documentos, setDocumentos] = useState<Documento[]>([]);
       const [totalPages, setTotalPages] = useState(documentosBase?.totalPages || 0);
       const [totalItems, setTotalItems] = useState(documentosBase?.totalElements || 0);
 
@@ -85,7 +85,7 @@ export default function DocumentosDetalladosTable({ tipo }: DocumentoDetalladoTa
     // Sincronizar documentos base cuando se cargan
     useEffect(() => {
     if (documentosBase && !isManualSearch) {
-        setDocumentos(documentosBase.content || []);
+        setDocumentos((documentosBase.content as DocumentoResponse[]) || []);
         setTotalPages(documentosBase.totalPages || 0);
         setTotalItems(documentosBase.totalElements || 0);
     }

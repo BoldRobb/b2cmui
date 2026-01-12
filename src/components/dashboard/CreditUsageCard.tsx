@@ -80,7 +80,7 @@ export default function CreditUsageCard() {
                   cx="50%"
                   cy="50%"
                   innerRadius={0}
-                  outerRadius={95}
+                  outerRadius={80}
                   fill="#8884d8"
                   paddingAngle={0}
                   dataKey="value"

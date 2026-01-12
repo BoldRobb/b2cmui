@@ -91,7 +91,7 @@ export const TipoDocumento = {
   VENTAS: "VENTAS"
 } as const;
 
-export function formatearFecha(fecha: string): string {
+export function formatearFecha(fecha: string | Date): string {
         return new Date(fecha).toLocaleDateString('es-MX', {
             year: 'numeric',
             month: 'long',

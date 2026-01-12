@@ -414,7 +414,9 @@ export default function DocumentosTable({ tipo }: DocumentosTableProps) {
                   }}
                 >
                   <TableCell padding="checkbox"
-                  sx={{ borderBottom: '1.5px solid',
+                  sx={{ 
+                    fontSize: '0.875rem',
+                    borderBottom: '1.5px solid',
                         borderColor: 'divider'}}>
                     <Checkbox
                       checked={selectedDocumentos?.includes(documento.id) ?? false}

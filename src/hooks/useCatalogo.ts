@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiCatalogo } from '@/api/ApiCatalogo';
-import { apiToken } from '@/api/ApiToken';
+import { apiCatalogo } from '../api/ApiCatalogo';
+import { apiToken } from '../api/ApiToken';
 
 export function useCategorias() {
   return useQuery({
@@ -11,14 +11,6 @@ export function useCategorias() {
   });
 }
 
-export function useCategoriasPath() {
-  return useQuery({
-    queryKey: ['catalogo', 'categorias-path'],
-    queryFn: () => apiCatalogo.getCategoriasPath(),
-    enabled: apiToken.isAuthenticated(),
-    staleTime: 1000 * 60 * 60, 
-  });
-}
 
 export function usePublicacionesBase() {
   return useQuery({
@@ -68,15 +60,13 @@ export function useArticuloData(id: number) {
 
 export function useCatalogoData() {
   const categorias = useCategorias();
-  const categoriasPath = useCategoriasPath();
   const publicaciones = usePublicacionesBase();
 
   return {
     categorias: categorias.data,
-    categoriasPath: categoriasPath.data,
     publicaciones: publicaciones.data,
-    isLoading: categorias.isLoading || categoriasPath.isLoading || publicaciones.isLoading,
-    isError: categorias.isError || categoriasPath.isError || publicaciones.isError,
-    error: publicaciones.error || categorias.error || categoriasPath.error,
+    isLoading: categorias.isLoading || publicaciones.isLoading,
+    isError: categorias.isError || publicaciones.isError,
+    error: publicaciones.error || categorias.error,
   };
 }

@@ -1,3 +1,5 @@
+import type { Publicacion } from "./PedidosInterface";
+
 export interface Categoria {
     id: string;
     nombre: string;
@@ -5,6 +7,17 @@ export interface Categoria {
     categorias_hijas: Categoria[];
 }
 
+export function getCategoriaDisplay(item: Publicacion, categorias: Categoria[]): string {
+        if (!item.categoria) {
+            return 'Sin categoría';
+        }
+
+        if (categorias && categorias.length > 0) {
+            return convertirNombresCategorias(categorias, item.categoria) || item.categoria;
+        }
+
+        return item.categoria;
+    }
 
 export function findCategoriaById(categorias: Categoria[], categoriaId: string): Categoria | null {
 

@@ -11,6 +11,7 @@ declare module '@mui/material/Paper' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     thirdary: true;
+    'info.light': true;
   }
 }
 
@@ -44,6 +45,7 @@ declare module '@mui/material/styles' {
 
   interface PaletteOptions {
     thirdary?: PaletteColor;
+    
   }
 }
 

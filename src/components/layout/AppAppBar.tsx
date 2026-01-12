@@ -32,6 +32,9 @@ import { apiToken } from '../../api/ApiToken';
 import { usePublicacionCache } from '../../hooks/usePublicacionCache';
 import { useQueryClient } from '@tanstack/react-query';
 import AccountBox from '@mui/icons-material/AccountBox';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { localStorageCartService } from '../../services/LocalStorageCartService';
+import { Badge } from '@mui/material';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -73,6 +76,13 @@ const ColorModeSwitch = () => {
 };
 
 export default function AppAppBar() {
+
+  const [cartCount, setCartCount] = React.useState(0);
+
+  React.useEffect(() => {
+    localStorageCartService.countItems().then((count) => setCartCount(count));
+  }, []);
+
   const { data: cliente } = useCliente();
   const isAdmin = apiToken.isAdmin();
   const { clearCache } = usePublicacionCache();
@@ -131,7 +141,7 @@ export default function AppAppBar() {
                   backgroundColor: 'transparent !important',
                 }}
               >
-                <HomeIcon fontSize="small" />
+                <HomeIcon fontSize="medium" />
               </IconButton>
             </Box>
     )
@@ -264,8 +274,8 @@ export default function AppAppBar() {
                   }
                 }}
               >
-                <MenuItem onClick={handleCloseMenus}>Catálogo</MenuItem>
-                <MenuItem onClick={handleCloseMenus}>Órdenes</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/catalogo'); }}>Catálogo</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/ordenes'); }}>Órdenes</MenuItem>
               </Menu>
 
             </Box>
@@ -277,9 +287,14 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small">
-              Carrito
-            </Button>
+            <Tooltip title="Carrito">
+              <IconButton color="primary" aria-label='carrito'>
+              <Badge badgeContent={cartCount} color="primary" sx={{padding:'5px'}} max={99}>
+                <ShoppingCartIcon sx={{fontSize:'32'}}/>
+              </Badge>
+                
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Perfil">
               <IconButton
                 onClick={handleProfileClick}

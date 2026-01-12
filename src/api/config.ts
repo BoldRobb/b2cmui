@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
   documentos: `${API_URL}/documentos`,
   facturacion: `${API_URL}/facturacion`,
   historial: `${API_URL}/historial`,
-  images: `${API_URL}/images`, 
+  images: `${API_URL}/imagen`, 
   ordenes: `${API_URL}/ordenes`,
   pedidos: `${API_URL}/pedidos`,
   token: `${API_URL}/token`,

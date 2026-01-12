@@ -3,6 +3,7 @@ type NotificationVariant = 'success' | 'error' | 'warning' | 'info';
 interface Notification {
   message: string;
   variant: NotificationVariant;
+  color: string;
   key: string;
   persist?: boolean;
 }
@@ -26,6 +27,7 @@ class NotificationService {
       message,
       variant: 'success',
       key: Date.now().toString(),
+      color: 'success.light',
     });
   }
 
@@ -38,6 +40,7 @@ class NotificationService {
       message: displayMessage,
       variant: 'error',
       key: Date.now().toString(),
+      color: 'error.light',
     });
   }
 
@@ -46,6 +49,7 @@ class NotificationService {
       message,
       variant: 'warning',
       key: Date.now().toString(),
+      color: 'warning.light',
     });
   }
 
@@ -55,6 +59,7 @@ class NotificationService {
       variant: 'info',
       key: Date.now().toString(),
       persist,
+      color: 'info.main',
     });
   }
 
@@ -65,6 +70,7 @@ class NotificationService {
       variant: 'info',
       key,
       persist: true,
+      color: 'info.main',
     });
     return key;
   }

@@ -54,7 +54,7 @@ class ApiImages{
         params.append('id', id.toString());
         params.append('imagen', imagen);
         
-        return this.request<Blob>(`/imagen?${params.toString()}`, {
+        return this.request<Blob>(`?${params.toString()}`, {
             method: 'GET',
         }, 'blob');
     }

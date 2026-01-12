@@ -4,6 +4,7 @@ import { apiToken } from '../api/ApiToken';
 import { apiCotizaciones } from '../api/apiCotizaciones';
 import type { DocumentosQueryParams } from '../types/DocumentosInterface';
 import {apiPedidos} from '../api/apiPedidos';
+import { apiOrdenes } from '../api/ApiOrdenes';
 type TipoDocumento = 'facturas' | 'notas-devolucion' | 'pagos' | 'otros-documentos' |'pedidos'|'cotizaciones'| 'facturas-servicios';
 
 export function useTiposOperacion() {
@@ -70,7 +71,20 @@ export function useCargosBase() {
     staleTime: 1000 * 60 * 3, 
   });
 }
-
+export function useOrdenesBase() {
+  return useQuery({
+    queryKey: ['ordenes', 'base'],
+    queryFn: async () => {
+      return apiOrdenes.getOrdenes({ 
+        page: 1, 
+        size: 10, 
+        sort: 'fechaCreacion,DESC' 
+      });
+    },
+    enabled: apiToken.isAuthenticated() && !apiToken.isAdmin(),
+    staleTime: 1000 * 60 * 1, 
+  });
+}
 export function useCotizacionesBase() {
   return useQuery({
     queryKey: ['cotizaciones', 'base'],

@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import PageBg from "../../components/layout/PageBg";
 import DocumentosHeader from "../../components/common/DocumentosHeader";
 import StoreIcon from '@mui/icons-material/Store';
+import OrdenesTable from "../../components/common/OrdenesTable";
 
 export default function OrdenesPage(){
 
@@ -14,7 +15,7 @@ export default function OrdenesPage(){
             
             <DocumentosHeader nombre="Mis Órdenes" icon={<StoreIcon sx={{ fontSize: 32 }} />} color="thirdary.main"/>        
 
-            
+            <OrdenesTable />
         </Container>
     </PageBg>
 

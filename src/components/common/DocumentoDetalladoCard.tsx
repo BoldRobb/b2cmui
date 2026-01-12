@@ -2,6 +2,7 @@ import { Box, Card, Divider, Grid, Table, TableBody, TableCell, TableContainer, 
 import type { DocumentoDetallado } from "../../types/PedidosInterface";
 import { formatearMoneda } from "../../types/DocumentosInterface";
 import ImageContainer from "./ImageContainer";
+import ProductItem from "../products/ProductItem";
 
 
 
@@ -119,6 +120,7 @@ export default function DocumentoDetalladoCard({ documento }: DocumentoDetallesP
                 </Typography>
             </Grid>
             <Divider/>
+            <ProductItem publicacion={documento.partidas[0].publicacion} />
             <Grid container justifyContent="flex-end" sx={{ padding: '16px' }}>
                 <Typography variant="body1" sx={{ fontWeight: 700 }}>
                     Total: {formatearMoneda(documento.total)}
