@@ -4,11 +4,12 @@ import ImageContainer from "../common/ImageContainer";
 import CartActions from "../common/CartActions";
 import { formatearMoneda } from "../../types/DocumentosInterface";
 import { useCatalogoData } from "../../hooks/useCatalogo";
-import { convertirNombresCategorias, getCategoriaDisplay, type Categoria } from "../../types/CategoriasInterface";
-import { useCartContext } from "../../context/CartContext";
+import {  getCategoriaDisplay } from "../../types/CategoriasInterface";
 
 interface ProductItemProps {
     publicacion: Publicacion;
+    showPaper?: boolean;
+    showSubtotal?: boolean;
     onClick?: () => void;
 }
 
@@ -51,6 +52,8 @@ export default function ProductItem(props: ProductItemProps) {
                 
                 {/* Columna 3: Acciones del carrito */}
                 <Box sx={{flexShrink: 0}}>
+                    
+                    {props.showPaper ? (
                     <Paper 
                         sx={{
                             marginBottom: 1,
@@ -74,7 +77,7 @@ export default function ProductItem(props: ProductItemProps) {
                         }}>
                             {props.publicacion.cantidad > 0 ? `${props.publicacion.cantidad.toFixed(2)} en existencia` : 'No hay existencias'}
                         </Typography>
-                    </Paper>
+                    </Paper>) : null}
                     {props.publicacion.cantidad > 0 && (
                     <CartActions
                         publicacionId={props.publicacion.id}

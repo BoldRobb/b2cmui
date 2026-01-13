@@ -3,7 +3,7 @@ import type { FilterValues } from "./FilterProducts";
 import type { PublicacionResponsePaginada } from "../../types/PedidosInterface";
 import { useCatalogoData } from "../../hooks/useCatalogo";
 import { apiCatalogo } from "../../api/ApiCatalogo";
-import { Box, Button, Card, CircularProgress, Divider, List, MenuItem, Select, Stack, TextField, Typography, useColorScheme } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Divider, List, ListItem, MenuItem, Pagination, Select, Stack, TextField, Typography, useColorScheme } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ProductItem from "./ProductItem";
 import ArticuloModal, { type ArticuloModalRef } from "../modals/ArticuloModal";
@@ -17,16 +17,14 @@ export default function ProductList(filtros: FilterValues ){
       const { 
         error: errorBase,
         publicaciones: publicacionesBase,
-        isError: isErrorBase,
         isLoading: isLoadingBase,
     } = useCatalogoData();
     const [nombre, setNombre] = useState('');
     const [loading, setLoading] = useState(false);
-    const [currentSort, setCurrentSort] = useState<string>('precio,desc');
+    const [currentSort] = useState<string>('precio,desc');
     const [pageSize, setPageSize] = useState<number>(10);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [publicaciones, setPublicaciones] = useState<PublicacionResponsePaginada | undefined>(publicacionesBase);
-    const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
     const [isManualSearch, setIsManualSearch] = useState(false);
     const [publicacionesError, setPublicacionesError] = useState<string | null>(null);
 
@@ -165,6 +163,11 @@ export default function ProductList(filtros: FilterValues ){
     </Box>
 
               <List
+              sx={{
+                maxHeight: 'calc(100vh - 350px)', 
+                overflow: 'auto', 
+                position: 'relative', 
+              }}
               >
                  { (isLoadingBase || loading) && (
                           <Box
@@ -179,6 +182,7 @@ export default function ProductList(filtros: FilterValues ){
                               justifyContent: 'center',
                               backgroundColor: (mode === 'dark' ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.7)'),
                               zIndex: 10,
+                              
                             }}
                           >
                             <CircularProgress />
@@ -191,14 +195,50 @@ export default function ProductList(filtros: FilterValues ){
                     
                 ) : (
                     publicaciones?.content.map((publicacion) => (
+                       
                         <ProductItem 
                             publicacion={publicacion} 
+                            showPaper={true}
                             key={publicacion.id} 
                             onClick={() => handleOpenArticulo(publicacion.id)}
                         />
+
                     ))
                 )}
               </List>
+
+              {/* Controles de paginación */}
+              {publicaciones && publicaciones.content.length > 0 && (
+                <Box 
+                  sx={{ 
+                    p: 2, 
+                    borderTop: '1px solid', 
+                    borderColor: 'divider',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: 2
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    Mostrando {publicaciones.content.length} de {publicaciones.totalElements} productos
+                    {publicaciones.totalPages > 1 && ` (Página ${currentPage} de ${publicaciones.totalPages})`}
+                  </Typography>
+                  
+                  {publicaciones.totalPages > 1 && (
+                    <Pagination 
+                      count={publicaciones.totalPages}
+                      page={currentPage}
+                      onChange={(_, page) => handlePageChange(page)}
+                      color="primary"
+                      showFirstButton
+                      showLastButton
+                      disabled={loading}
+                    />
+                  )}
+                </Box>
+              )}
 
               <ArticuloModal ref={modalRef} />
         </Card>

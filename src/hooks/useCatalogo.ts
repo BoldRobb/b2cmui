@@ -29,7 +29,7 @@ export function usePublicacionId(id: number) {
 return useQuery({
     queryKey: ['catalogo', 'publicacion', id],
     queryFn: () => apiCatalogo.getPublicacionById(id),
-    enabled: apiToken.isAuthenticated() && id!= 0,
+    enabled: apiToken.isAuthenticated() && id != 0,
     staleTime: 1000 * 60 * 15,
 })}
 
@@ -37,7 +37,7 @@ export function usePublicacionIdExistencias(id: number) {
 return useQuery({
     queryKey: ['catalogo', 'publicacion', id, 'existencias'],
     queryFn: () => apiCatalogo.getPublicacionesExistenciasById(id),
-    enabled: apiToken.isAuthenticated(),
+    enabled: apiToken.isAuthenticated() && id != 0,
     staleTime: 1000 * 60 * 15,
 
 })}

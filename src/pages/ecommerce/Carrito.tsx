@@ -1,16 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState,  } from "react";
+import { useNavigate } from 'react-router-dom';
 import PageBg from "../../components/layout/PageBg";
 import type { OrdenModalRef } from "../../components/modals/OrdenesModal";
 import { useCartContext } from "../../context/CartContext";
 import type { Orden } from "../../types/OrdenesInterface";
 import { apiCarrito } from "../../api/ApiCarrito";
 import { apiOrdenes } from "../../api/ApiOrdenes";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardHeader, Avatar, IconButton, Divider, Box, Stack, Modal } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardHeader, CircularProgress, Divider, Box, Stack, List } from "@mui/material";
 import ProductItem from "../../components/products/ProductItem";
 import { formatearMoneda } from "../../types/DocumentosInterface";
 import OrdenesModal from "../../components/modals/OrdenesModal";
 
 export default function CarritoPage(){
+        const navigate = useNavigate();
         const ordenModalRef =  useRef<OrdenModalRef>(null);
     const [selectedOrden, setSelectedOrden] = useState<Orden | null>(null);
     const [totalCarrito, setTotalCarrito] = useState<number>(0);
@@ -94,9 +96,10 @@ export default function CarritoPage(){
 
     return(
         <PageBg>
-            <Stack direction="row" justifyContent="space-between" spacing={10}>
+            <Stack direction="row" justifyContent="space-between" spacing={5}>
+                <Box sx={{width:'70%'}}>
             <Card
-            sx={{width:'70%'}}>
+            >
                 <CardHeader
                   title={<Typography variant="h3" sx={{fontWeight:'600'}}>Carrito</Typography>}
                   sx={{mb:'8px'}}
@@ -105,16 +108,34 @@ export default function CarritoPage(){
                 <Typography variant="h5" color="initial" sx={{mb:'16px', mt:'16px'}}>Productos ({count}):</Typography>
                 <Divider/>
                 {loading && <Typography variant="body1" color="initial" sx={{m:'16px'}}>Cargando productos del carrito...</Typography>}
-                {!loading && items.length === 0 && <Typography variant="body1" color="initial" sx={{m:'16px'}}>El carrito está vacío.</Typography>}
-                
+                {!loading && items.length === 0 &&
+                <Stack direction={'column'} sx={{display:'flex', alignItems:'center', justifyContent:'center', py:'32px', gap:'16px'}}>
+
+                 <Typography variant="h4" color="initial" sx={{mt:'16px', position:'relative'}}>El carrito está vacío.</Typography>
+                 <Typography variant="subtitle1" color="initial">Visita nuestro catalogo para poder agregar productos.</Typography>
+                 <Button  variant="outlined" onClick={() => navigate('/app/catalogo')}>Ir al catálogo</Button>
+                </Stack>
+                 
+                 }
+                <List
+                sx={{
+                maxHeight: 'calc(100vh - 350px)', 
+                overflow: 'auto', 
+                position: 'relative', 
+              }}>
+                    
                 {!loading && items.map((item) => {
                     const publicacion = publicaciones.get(item.publicacionId);
                     if (!publicacion) return null;
-                    return <ProductItem key={item.publicacionId} publicacion={publicacion} />;
-                })}
+                    return <ProductItem key={item.publicacionId} publicacion={publicacion} />;})}
+                    
+                </List>
+                
             </Card>
-            <Card
-            sx={{width:'30%', height:'auto'}}>
+                </Box>
+           <Box width={'30%'}>
+<Card
+            sx={{height:'auto'}}>
                   <CardHeader
                   title={<Typography variant="h3" sx={{fontWeight:'600'}}>Resumen</Typography>}
                   sx={{mb:'8px'}}
@@ -148,6 +169,8 @@ export default function CarritoPage(){
                 </Button>
                 
             </Card>
+           </Box>
+            
             </Stack>
             
             <Dialog

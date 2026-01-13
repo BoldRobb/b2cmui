@@ -35,7 +35,7 @@ export default function CatalogoPage(){
             </Box>
             <Box width='70%'>
             
-            <ProductList {...filters} ></ProductList>
+            <ProductList {...filters}></ProductList>
             </Box>
             </Stack>
         </PageBg>

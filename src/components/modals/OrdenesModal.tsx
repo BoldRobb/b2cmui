@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import type { Orden } from "../../types/OrdenesInterface";
-import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import type { Publicacion } from "../../types/PedidosInterface";
 import { useCartContext } from "../../context/CartContext";
 import { apiOrdenes } from "../../api/ApiOrdenes";
@@ -8,7 +8,6 @@ import { OrdenesPublicacionesCache } from "../../services/documentosCacheService
 import { notificationService } from "../../services/notificationService";
 import { Box, Button, Card, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography, useColorScheme } from "@mui/material";
 import { formatearFecha, formatearMoneda } from "../../types/DocumentosInterface";
-import ImageIcon from '@mui/icons-material/Image';
 import ImageContainer from "../common/ImageContainer";
 
 export interface OrdenModalRef {
@@ -122,7 +121,9 @@ const OrdenesModal = forwardRef<OrdenModalRef>((_, ref) => {
                         <Card
                             sx={{
                                 backgroundColor: (mode === 'dark' ? 'hsla(210, 100%, 5%, 0.31)' : 'rgba(216, 216, 216, 0.34)'),
-                                p: 2
+                                p: 2,
+                                
+
                             }}
                         >
                             <Typography variant="h6" fontWeight={600} gutterBottom>
@@ -135,17 +136,24 @@ const OrdenesModal = forwardRef<OrdenModalRef>((_, ref) => {
                                 </Box>
                             ) : (
                                 <>
-                                    <Table size="small">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell sx={{ fontWeight: 700 }}>Producto</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 700 }}>Cantidad</TableCell>
-                                                <TableCell align="right" sx={{ fontWeight: 700 }}>Precio Unitario</TableCell>
-                                                <TableCell align="right" sx={{ fontWeight: 700 }}>Subtotal</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {publicaciones.map((pub) => {
+                                    <Box sx={{ 
+                                        maxHeight: '300px', 
+                                        overflow: 'auto',
+                                        border: '1px solid',
+                                        borderColor: 'divider',
+                                        borderRadius: 1
+                                    }}>
+                                        <Table size="small" stickyHeader>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell sx={{ fontWeight: 700 }}>Producto</TableCell>
+                                                    <TableCell align="center" sx={{ fontWeight: 700 }}>Cantidad</TableCell>
+                                                    <TableCell align="right" sx={{ fontWeight: 700 }}>Precio Unitario</TableCell>
+                                                    <TableCell align="right" sx={{ fontWeight: 700 }}>Subtotal</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                    {publicaciones.map((pub) => {
                                                 const detalle = orden?.detalles?.find(d => d.publicacion_id === pub.id);
                                                 const cantidad = detalle?.cantidad || pub.cantidad || 0;
                                                 const subtotal = pub.precio * cantidad;
@@ -166,6 +174,7 @@ const OrdenesModal = forwardRef<OrdenModalRef>((_, ref) => {
                                             })}
                                         </TableBody>
                                     </Table>
+                                    </Box>
                                     
                                     <Divider sx={{ my: 2 }} />
                                     

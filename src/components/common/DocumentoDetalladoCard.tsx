@@ -55,9 +55,9 @@ export default function DocumentoDetalladoCard({ documento }: DocumentoDetallesP
               </TableRow>
             ) :(
                 documento.partidas.map((partida) => (
-                    
+                    <>
                     <TableRow
-                    key={documento.id}
+                    
                   hover
                   sx={{
                     backgroundColor: 'inherit',
@@ -96,9 +96,13 @@ export default function DocumentoDetalladoCard({ documento }: DocumentoDetallesP
 
                   </TableRow>
                   
+
+                    </>
+                   
+                  
                 
                 ))
-            
+                
             
             )}
                 </TableBody>
