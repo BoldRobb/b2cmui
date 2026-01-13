@@ -1,6 +1,5 @@
 
 import PageBg from "../../components/layout/PageBg";
-import CartActions from "../../components/common/CartActions";
 import FilterProducts, { type FilterValues } from "../../components/products/FilterProducts";
 import Box from "@mui/material/Box";
 import ProductList from "../../components/products/ProductList";
