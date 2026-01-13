@@ -19,6 +19,7 @@ import CotizacionesPage from './pages/consultas/Cotizaciones';
 import OrdenesPage from './pages/ecommerce/Ordenes';
 import { CartProvider } from './context/CartContext';
 import CatalogoPage from './pages/ecommerce/Catalogo';
+import CarritoPage from './pages/ecommerce/Carrito';
 
 function App() {
 
@@ -67,6 +68,7 @@ function App() {
             {/*E-commerce*/}
             <Route path="catalogo" element={<CatalogoPage />} />
             <Route path="ordenes" element={<OrdenesPage />} />
+            <Route path="carrito" element={<CarritoPage />} />
 
           </Route>
         </Routes>

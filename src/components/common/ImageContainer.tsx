@@ -39,7 +39,7 @@ export default function ImageContainer( {
                     color: '#999'
                 }}
             >
-                <ImageIcon style={{ fontSize: '24px' }} />
+                <ImageIcon style={{ fontSize: `${Math.min(width, height) / 2}px` }} />
                 
             </div>
         );

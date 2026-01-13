@@ -1,17 +1,10 @@
 import { Box, Button, TextField, Typography, useColorScheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import NumberField from "../NumberField";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useCartContext } from "../../context/CartContext";
 interface CarritoActionsProps {
     publicacionId: number;
-    isInCart: boolean;
-    currentQuantity: number;
-    loading: boolean;
-    isWorking: boolean;
-    onAddToCart: ((publicacionId: number, cantidad: number) => Promise<void>) | undefined;
-    onUpdateQuantity: (publicacionId: number, cantidad: number) => Promise<unknown>;
-    onRemoveFromCart: (publicacionId: number) => Promise<void>;
     size?: 'small' | 'default' | 'large'; 
     layout?: 'horizontal' | 'vertical';
     deleteOnly?: boolean; 
@@ -20,12 +13,6 @@ interface CarritoActionsProps {
 
 export default function CartActions({
     publicacionId,
-    isInCart,
-    currentQuantity,
-    loading,
-    onAddToCart,
-    onUpdateQuantity,
-    onRemoveFromCart,
     size = 'small',
     layout = 'vertical',
     deleteOnly = false,
@@ -33,14 +20,15 @@ export default function CartActions({
 : CarritoActionsProps) {
 
     const {mode} = useColorScheme();
-
-    const [localQuantity, setLocalQuantity] = useState(currentQuantity);
+    const { isInCart, getItemQuantity, loading, addToCart, updateQuantity, removeFromCart } = useCartContext();
+    const [localQuantity, setLocalQuantity] = useState(getItemQuantity(publicacionId));
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        setLocalQuantity(currentQuantity);
+        console.log("Cantidad en carrito actualizada:", getItemQuantity(publicacionId));
+        setLocalQuantity(getItemQuantity(publicacionId));
         
-    }, [currentQuantity]);
+    }, [getItemQuantity, publicacionId]);
 
     useEffect(() => {
         // Limpiar el timer cuando el componente se desmonte
@@ -60,7 +48,7 @@ export default function CartActions({
         }
         
         debounceTimerRef.current = setTimeout(async () => {
-            const result = await onUpdateQuantity(publicacionId, newQuantity);
+            const result = await updateQuantity(publicacionId, newQuantity);
             if (typeof result === 'number') {
                 setLocalQuantity(result);
             }
@@ -70,13 +58,11 @@ export default function CartActions({
 
     const handleAddToCart = async () => {
         setLocalQuantity(1);
-        if (onAddToCart) {
-            await onAddToCart(publicacionId, 1);
-        }
+        await addToCart(publicacionId, 1);
     };
 
     const handleRemoveFromCart = async () => {
-        await onRemoveFromCart(publicacionId);
+        await removeFromCart(publicacionId);
     };
     const handleContainerClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -87,7 +73,7 @@ export default function CartActions({
     
 
 
-if (!isInCart){
+if (!isInCart || localQuantity === 0) {
     return(
         <div onClick={handleContainerClick}>
             <Button
@@ -157,14 +143,15 @@ const renderContent = (
                        '&:hover': {
                            borderColor: 'error.main',
                            backgroundColor: 'rgba(255, 0, 0, 0.15)',
-                       }
+                       }, padding: 1,
                    } : {
                           borderColor: 'error.main',
                           color: 'error.main',
                           '&:hover': {
                               borderColor: 'error.main',
                               backgroundColor: 'rgba(255, 0, 0, 0.04)',
-                          }
+                          },
+                          padding: 1,
                    }}
                 >
                      {deleteOnly ? "" : (size === 'large' ? "Eliminar del carrito" : "Eliminar")}

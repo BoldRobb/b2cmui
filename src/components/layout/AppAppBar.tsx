@@ -35,6 +35,7 @@ import AccountBox from '@mui/icons-material/AccountBox';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { localStorageCartService } from '../../services/LocalStorageCartService';
 import { Badge } from '@mui/material';
+import { useCartContext } from '../../context/CartContext';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -77,11 +78,8 @@ const ColorModeSwitch = () => {
 
 export default function AppAppBar() {
 
-  const [cartCount, setCartCount] = React.useState(0);
-
-  React.useEffect(() => {
-    localStorageCartService.countItems().then((count) => setCartCount(count));
-  }, []);
+  const { count } = useCartContext();
+  const cartCount = count;
 
   const { data: cliente } = useCliente();
   const isAdmin = apiToken.isAdmin();
@@ -288,7 +286,9 @@ export default function AppAppBar() {
             }}
           >
             <Tooltip title="Carrito">
-              <IconButton color="primary" aria-label='carrito'>
+              <IconButton color="primary"
+              onClick={() => {  navigate('/app/carrito'); }}
+               aria-label='carrito'>
               <Badge badgeContent={cartCount} color="primary" sx={{padding:'5px'}} max={99}>
                 <ShoppingCartIcon sx={{fontSize:'32'}}/>
               </Badge>

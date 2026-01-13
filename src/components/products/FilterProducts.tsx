@@ -14,11 +14,9 @@ export interface FilterValues {
 
 interface FilterProductsProps {
     onFilterChange?: (filters: FilterValues) => void;
-    onSearch?: (filters: FilterValues) => void;
-    onClear?: () => void;
 }
 
-export default function FilterProducts({ onFilterChange, onSearch, onClear }: FilterProductsProps){
+export default function FilterProducts({ onFilterChange, }: FilterProductsProps){
 
     const {mode} = useColorScheme();
 
@@ -53,10 +51,7 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
         if (onFilterChange) {
             onFilterChange(filterValues);
         }
-        
-        if (onSearch) {
-            onSearch(filterValues);
-        }
+            
     };
 
     const handleClear = () => {
@@ -77,9 +72,6 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
             onFilterChange(filterValues);
         }
         
-        if (onClear) {
-            onClear();
-        }
     };
 
     const buildCategoriaOptions = (categorias: Categoria[], level: number = 0, parentPath: string = ''): any[] => {
@@ -115,12 +107,21 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
     };
 
     return(
-        <Card  sx={{backgroundColor: (mode === 'dark' ? 'hsla(210, 100%, 5%, 0.31) !important' : 'rgba(216, 216, 216, 0.34)'),}}>
+        <Card  sx={{
+        borderRadius: 2,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        border: '1px solid',
+        borderColor: 'divider',
+        overflow: 'hidden',
+        
+      }}>
             
-            <Stack direction={"column"} spacing={2}>
+            <Stack direction={"column"} spacing={2} >
                 
-                    <Typography variant="h5">Filtros</Typography>
-                    <Divider/>
+                <Box sx={{ p: 1,  borderBottom:'1px solid', borderColor: 'divider', pb:'0' }}>
+                    <Typography variant="h4">Filtros</Typography>
+                    
+                </Box>
                     <Box>
                         <Typography variant="h6">Categoría</Typography>
                         <Select
@@ -136,6 +137,14 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
                                             e.stopPropagation();
                                             setSelectCategoriaValue('');
                                             setSelectedCategoria('');
+                                            if (onFilterChange) {
+                                        onFilterChange({
+                                            categoria: '',
+                                            precioMin,
+                                            precioMax,
+                                            disponibilidad
+                                        });
+                                    }
                                         }}
                                         edge="end"
                                         sx={{border:'none'}}
@@ -147,7 +156,6 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
                         }
                         onChange={(event) => {
                                     const value = event.target.value;
-                                    console.log("Valor seleccionado (ruta completa):", value);
                                     setSelectedCategoria(value);
                                     setSelectCategoriaValue(value || '');
                                     
@@ -201,6 +209,7 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
                         }}
                         disabled={isErrorBase || loadingBase}
                         onChange={(value) => setPrecioMin(value.target.value as unknown as number)}
+                        value={precioMin ?? ''}
                         />
                         
                         <TextField type="number"
@@ -216,6 +225,7 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
                         }} 
                         disabled={isErrorBase || loadingBase}
                         onChange={(value) => setPrecioMax(value.target.value as unknown as number)}
+                        value={precioMax ?? ''}
                         />
                     </Box>
                     <Divider/>
@@ -224,7 +234,7 @@ export default function FilterProducts({ onFilterChange, onSearch, onClear }: Fi
                         <Switch
                         disabled={isErrorBase || loadingBase}
                         onChange={(event) => setDisponibilidad(event.target.checked)}
-                        defaultChecked={false}
+                        checked={disponibilidad ?? false}
                         >
                             
                         </Switch>
