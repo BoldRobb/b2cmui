@@ -7,23 +7,14 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
-import Drawer from '@mui/material/Drawer';
 import Menu from '@mui/material/Menu';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useColorScheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {useLogoUrl} from '../../hooks/useLogo';
@@ -33,7 +24,6 @@ import { usePublicacionCache } from '../../hooks/usePublicacionCache';
 import { useQueryClient } from '@tanstack/react-query';
 import AccountBox from '@mui/icons-material/AccountBox';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { localStorageCartService } from '../../services/LocalStorageCartService';
 import { Badge } from '@mui/material';
 import { useCartContext } from '../../context/CartContext';
 
@@ -87,27 +77,23 @@ export default function AppAppBar() {
   const queryClient = useQueryClient();
   const { data: logoClaro } = useLogoUrl('fondo-claro'); // React Query para el logo
   const { data: logoOscuro } = useLogoUrl('fondo-oscuro'); // React Query para el logo
-  const [open, setOpen] = React.useState(false);
   const [documentosAnchor, setDocumentosAnchor] = React.useState<null | HTMLElement>(null);
+  const [configuracionAnchor, setConfiguracionAnchor] = React.useState<null | HTMLElement>(null);
   const [consultasAnchor, setConsultasAnchor] = React.useState<null | HTMLElement>(null);
   const [ecommerceAnchor, setEcommerceAnchor] = React.useState<null | HTMLElement>(null);
   const [profileAnchor, setProfileAnchor] = React.useState<null | HTMLElement>(null);
-  
-  const [documentosOpenMobile, setDocumentosOpenMobile] = React.useState(false);
-  const [consultasOpenMobile, setConsultasOpenMobile] = React.useState(false);
-  const [ecommerceOpenMobile, setEcommerceOpenMobile] = React.useState(false);
   const navigate = useNavigate();
   const { mode } = useColorScheme();
 
-  const displayName = cliente?.nombre || 'Cliente';
+  const displayName = cliente?.nombre || (cliente ? cliente.nombre : 'Administrador') || 'Cliente';
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
 
   const handleDocumentosClick = (event: React.MouseEvent<HTMLElement>) => {
     setDocumentosAnchor(event.currentTarget);
   };
+  const handleConfiguracionClick = (event: React.MouseEvent<HTMLElement>) => {
+    setConfiguracionAnchor(event.currentTarget);
+  }
 
   const handleConsultasClick = (event: React.MouseEvent<HTMLElement>) => {
     setConsultasAnchor(event.currentTarget);
@@ -156,6 +142,7 @@ export default function AppAppBar() {
     setDocumentosAnchor(null);
     setConsultasAnchor(null);
     setEcommerceAnchor(null);
+    setConfiguracionAnchor(null);
   };
 
   return (
@@ -345,117 +332,108 @@ export default function AppAppBar() {
             </Menu>
             <ColorModeSwitch />
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            <ColorModeSwitch />
-            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer
-              anchor="top"
-              open={open}
-              onClose={toggleDrawer(false)}
-              PaperProps={{
-                sx: {
-                  top: 'var(--template-frame-height, 0px)',
-                },
-              }}
-            >
-              <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                  }}
-                >
-                  <IconButton onClick={toggleDrawer(false)}>
-                    <CloseRoundedIcon />
-                  </IconButton>
-                </Box>
-
-                <List>
-                  <ListItemButton>
-                    <ListItemText primary="Dashboard" />
-                  </ListItemButton>
-                  
-                  <ListItemButton onClick={() => setDocumentosOpenMobile(!documentosOpenMobile)}>
-                    <ListItemText primary="Documentos" />
-                    {documentosOpenMobile ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                  <Collapse in={documentosOpenMobile} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Facturas" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Notas de Devolución" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Pagos" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Otros Documentos" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Facturas de Servicios" />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-
-                  <ListItemButton onClick={() => setConsultasOpenMobile(!consultasOpenMobile)}>
-                    <ListItemText primary="Consultas" />
-                    {consultasOpenMobile ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                  <Collapse in={consultasOpenMobile} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Antigüedad de Saldos" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Pedidos" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Cotizaciones" />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-
-                  <ListItemButton onClick={() => setEcommerceOpenMobile(!ecommerceOpenMobile)}>
-                    <ListItemText primary="E-Commerce" />
-                    {ecommerceOpenMobile ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                  <Collapse in={ecommerceOpenMobile} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Catálogo" />
-                      </ListItemButton>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemText primary="Órdenes" />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-                </List>
-                
-                <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Carrito
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth onClick={handleLogout}>
-                    Cerrar sesión
-                  </Button>
-                </MenuItem>
-              </Box>
-            </Drawer>
-          </Box>
+          
         </StyledToolbar>
         )}
         {isAdmin && (
           <StyledToolbar variant="dense" disableGutters>
-            <Box>
+            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0, gap: 2 }}>
               {renderMainBox()}
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <Button variant="text" color="info" size="small"
+                onClick={() => navigate('/app/historial')}
+              >
+                Historial
+              </Button>
+              <Button 
+                variant="text" 
+                color="info" 
+                size="small"
+                endIcon={<KeyboardArrowDownIcon />}
+                onClick={handleConfiguracionClick}
+              >
+                Configuración
+              </Button>
+              <Menu
+                anchorEl={configuracionAnchor}
+                open={Boolean(configuracionAnchor)}
+                onClose={handleCloseMenus}
+                slotProps={{
+                  paper: {
+                    sx: {
+                      backdropFilter: 'blur(24px)',
+                      backgroundColor: (theme) => theme.vars
+                        ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
+                        : alpha(theme.palette.background.default, 0.4),
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      boxShadow: 1,
+                    }
+                  }
+                }}
+              >
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/configuracion'); }}>General</MenuItem>
+                <MenuItem onClick={() => { handleCloseMenus(); navigate('/app/configuracion-facturacion'); }}>Facturación</MenuItem>
+              </Menu>
+              
+          
             </Box>
+            
+            </Box>
+            <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              gap: 1,
+              alignItems: 'center',
+            }}
+          >
+            <Tooltip title="Perfil">
+              <IconButton
+                onClick={handleProfileClick}
+                aria-label="perfil"
+                sx={{
+                  p: 0.5,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Avatar
+                  alt={displayName}
+                  sx={{ width: 32, height: 32, backgroundColor: 'transparent', color: 'inherit' }}
+                >
+                  <AccountBox />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={profileAnchor}
+              open={Boolean(profileAnchor)}
+              onClose={handleProfileClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    mt: 1,
+                    minWidth: 220,
+                    backdropFilter: 'blur(12px)',
+                    backgroundColor: (theme) => theme.vars
+                      ? `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`
+                      : alpha(theme.palette.background.paper, 0.8),
+                    border: '1px solid',
+                    borderColor: 'divider',
+                  },
+                },
+              }}
+            >
+              <MenuItem disabled sx={{ opacity: 1, fontWeight: 600 }}>
+                {apiToken.getCurrentUserSub()}
+              </MenuItem>
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+            </Menu>
+            <ColorModeSwitch />
+          </Box>
           </StyledToolbar>
 
         )}

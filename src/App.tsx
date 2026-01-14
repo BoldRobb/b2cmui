@@ -20,19 +20,25 @@ import OrdenesPage from './pages/ecommerce/Ordenes';
 import { CartProvider } from './context/CartContext';
 import CatalogoPage from './pages/ecommerce/Catalogo';
 import CarritoPage from './pages/ecommerce/Carrito';
-
-function App() {
-
-  const queryClient = new QueryClient({
+import HistorialPage from './pages/historial';
+import ConfiguracionGeneralPage from './pages/configuracion/ConfiguracionGeneral';
+import ConfiguracionFacturacionPage from './pages/configuracion/ConfiguracionFacturacion';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import RoleProtectedRoute from './components/auth/RoleProtectedRoute';
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
       refetchOnWindowFocus: false,
       retry: 1,
     }
-  }
+  }});
 
-});
+function App() {
+
+  
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -45,8 +51,12 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           
-          {/* Rutas con AppBar */}
-          <Route path="/app" element={<AppLayout />}>
+          {/* Rutas protegidas con AppBar */}
+          <Route path="/app" element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<Navigate to="/app/landing" replace />} />
 
             {/* Paginas principales */}
@@ -70,6 +80,22 @@ function App() {
             <Route path="ordenes" element={<OrdenesPage />} />
             <Route path="carrito" element={<CarritoPage />} />
 
+            {/* Administrador - Solo admin */}
+            <Route path="historial" element={
+              <RoleProtectedRoute allowedRoles={['admin']}>
+                <HistorialPage />
+              </RoleProtectedRoute>
+            } />
+            <Route path="configuracion" element={
+              <RoleProtectedRoute allowedRoles={['admin']}>
+                <ConfiguracionGeneralPage />
+              </RoleProtectedRoute>
+            } />
+            <Route path="configuracion-facturacion" element={
+              <RoleProtectedRoute allowedRoles={['admin']}>
+                <ConfiguracionFacturacionPage />
+              </RoleProtectedRoute>
+            } />
           </Route>
         </Routes>
       </BrowserRouter>

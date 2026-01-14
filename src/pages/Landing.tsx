@@ -1,6 +1,7 @@
 import { apiToken } from '../api/ApiToken';
 import HeroAdmin from '../components/landing/HeroAdmin';
 import HeroClient from '../components/landing/HeroClient';
+import PageBg from '../components/layout/PageBg';
 
 export default function LandingPage() {
   const isAuthenticated = apiToken.isAuthenticated();
@@ -10,9 +11,16 @@ export default function LandingPage() {
 
     if(isAuthenticated) {
         if(userRole === 'admin') {
-            return(<HeroAdmin />);
+            
+            return(
+            <PageBg>
+                <HeroAdmin />
+            </PageBg>);
         }else{
-            return(<HeroClient />);
+            return(
+            
+                <HeroClient />
+            );
         }
     }
 }
