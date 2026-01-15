@@ -135,7 +135,7 @@ export default function AppAppBar() {
     apiToken.removeToken();
     clearCache();
     queryClient.clear();
-    navigate('/login');
+    navigate('/');
   };
 
   const handleCloseMenus = () => {

@@ -1,5 +1,6 @@
 import { alpha, type Theme } from '@mui/material/styles';
 import type { Components } from '@mui/material/styles/';
+import type { PickersComponentSpecificLocaleText } from '@mui/x-date-pickers/locales';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
@@ -443,3 +444,4 @@ export const inputsCustomizations: Components<Theme> = {
     },
   },
 };
+

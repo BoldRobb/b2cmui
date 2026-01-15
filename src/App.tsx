@@ -25,6 +25,9 @@ import ConfiguracionGeneralPage from './pages/configuracion/ConfiguracionGeneral
 import ConfiguracionFacturacionPage from './pages/configuracion/ConfiguracionFacturacion';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import RoleProtectedRoute from './components/auth/RoleProtectedRoute';
+import Index from './pages/Index';
+import { useDocumentTitle } from './hooks/useTitle';
+import FacturacionPage from './pages/facturacion/FacturacionPage';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -34,22 +37,22 @@ const queryClient = new QueryClient({
     }
   }});
 
-function App() {
 
-  
+function AppContent() {
+  const { version } = useDocumentTitle();
 
-
-
-  return (
-    <QueryClientProvider client={queryClient}>
+  return(
     <AppTheme>
       <CartProvider>
         
       
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
+          
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Index />} />
+          <Route path="/facturacion" element={<Index />} />
+          <Route path="/facturacion/facturar" element={<FacturacionPage />} />
           
           {/* Rutas protegidas con AppBar */}
           <Route path="/app" element={
@@ -97,6 +100,9 @@ function App() {
               </RoleProtectedRoute>
             } />
           </Route>
+
+          {/* Ruta catch-all: redirige a / si no existe la ruta */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
       <NotificationSnackbar />
@@ -104,6 +110,15 @@ function App() {
       </CartProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </AppTheme>
+  )
+}
+
+function App() {
+
+
+  return (
+    <QueryClientProvider client={queryClient}>
+    <AppContent/>
     </QueryClientProvider>
   );
 }

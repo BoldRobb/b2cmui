@@ -37,7 +37,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-export default function LoginCard() {
+export default function LoginCard({ onLoginSuccess }: { onLoginSuccess?: () => void }) {
   const navigate = useNavigate();
   const [usernameError, setUsernameError] = useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
@@ -201,7 +201,7 @@ export default function LoginCard() {
         <Button
           fullWidth
           variant="outlined"
-          onClick={() => alert('Facturación en linea')}
+          onClick={onLoginSuccess}
           loading={loading}
           startIcon={
             <ArticleOutlinedIcon />

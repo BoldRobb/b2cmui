@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiFacturacion } from '@/api/ApiFacturacion';
+import { apiFacturacion } from '../api/ApiFacturacion';
 import { useLogoUrl } from './useLogo';
 
 

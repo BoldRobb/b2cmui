@@ -67,7 +67,7 @@ export default function ConfiguracionGeneralCard(){
       const handleLogout = () => {
         apiToken.removeToken();
         queryClient.clear();
-        navigate('/login?logout=true');
+        navigate('/');
     };
 
     const validateInputs = () => {
