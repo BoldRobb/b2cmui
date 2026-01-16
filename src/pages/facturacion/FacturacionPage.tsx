@@ -53,12 +53,12 @@ export default function FacturacionPage() {
                 {loadingData && metadatos && formularioFacturarModel && documento &&(
                    <>
                    
-                   <Grid size={{ xs: 12, md: 8 }} >
+                   <Grid size={{ xs: 12, md: 7 }} >
                         <FacturacionCard  
                         metadatos={metadatos}
                         formulario={formularioFacturarModel}  />
                     </Grid>
-                    <Grid size={{ xs: 12, md: 4 }} >
+                    <Grid size={{ xs: 12, md: 5 }} >
                         <Stack direction='column' sx={{gap:2}}>
                         <DatosEmpresaCard
                         formulario = {formularioFacturarModel}

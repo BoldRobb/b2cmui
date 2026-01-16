@@ -532,13 +532,9 @@ export default function FacturaBuscarCard({ onBack }: { onBack?: () => void }) {
     return(
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Card variant='outlined'>
-          <Button
-          startIcon={<ArrowBackIcon fontSize={'large'} />}
-          variant='text'
-          onClick={onBack}
-          >
-              <Typography variant="subtitle1" >Volver al inicio de sesión</Typography>
-          </Button>
+          
+          <Typography variant="h3" >Facturación en linea</Typography>
+          
           <Divider/>
             <Typography variant="h5" sx={{  mt: 1, fontWeight: 600 }}>Completa los datos</Typography>
           {renderForm()}

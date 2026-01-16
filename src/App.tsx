@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import LandingPage from './pages/Landing';
 import AppLayout from './pages/layout/AppLayout';
@@ -28,6 +28,9 @@ import RoleProtectedRoute from './components/auth/RoleProtectedRoute';
 import Index from './pages/Index';
 import { useDocumentTitle } from './hooks/useTitle';
 import FacturacionPage from './pages/facturacion/FacturacionPage';
+import FacturaPage from './pages/facturacion/FacturaPage';
+import { useColorScheme } from '@mui/material/styles';
+import { useEffect, useRef } from 'react';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -37,6 +40,31 @@ const queryClient = new QueryClient({
     }
   }});
 
+function ColorSchemeController() {
+  const location = useLocation();
+  const { mode, setMode } = useColorScheme();
+  const previousModeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const isFacturacionRoute = location.pathname.startsWith('/facturacion');
+
+    if (isFacturacionRoute) {
+      if (mode && mode !== 'light') {
+        previousModeRef.current = mode;
+      }
+      if (mode !== 'light') {
+        setMode('light');
+      }
+    } else {
+      if (previousModeRef.current && mode === 'light') {
+        setMode(previousModeRef.current as 'light' | 'dark' | 'system');
+        previousModeRef.current = null;
+      }
+    }
+  }, [location.pathname, mode, setMode]);
+
+  return null;
+}
 
 function AppContent() {
   const { version } = useDocumentTitle();
@@ -45,15 +73,14 @@ function AppContent() {
     <AppTheme>
       <CartProvider>
         
-      
       <BrowserRouter>
+        <ColorSchemeController />
         <Routes>
           
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Index />} />
+          <Route path="/" element={<Login />} />
           <Route path="/facturacion" element={<Index />} />
           <Route path="/facturacion/facturar" element={<FacturacionPage />} />
-          
+          <Route path="/facturacion/factura" element={<FacturaPage />} />
           {/* Rutas protegidas con AppBar */}
           <Route path="/app" element={
             <ProtectedRoute>
@@ -101,7 +128,7 @@ function AppContent() {
             } />
           </Route>
 
-          {/* Ruta catch-all: redirige a / si no existe la ruta */}
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

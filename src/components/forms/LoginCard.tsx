@@ -196,21 +196,6 @@ export default function LoginCard({ onLoginSuccess }: { onLoginSuccess?: () => v
           Iniciar Sesión
         </Button>
       </Box>
-      <Divider>o</Divider>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={onLoginSuccess}
-          loading={loading}
-          startIcon={
-            <ArticleOutlinedIcon />
-          }
-        >
-          Facturación en linea
-        </Button>
-
-      </Box>
     </Card>
   );
 }

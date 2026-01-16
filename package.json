@@ -33,6 +33,7 @@
     "@tiptap/react": "^3.15.1",
     "@tiptap/starter-kit": "^3.15.1",
     "dayjs": "^1.11.19",
+    "embla-carousel-react": "^8.6.0",
     "js-cookie": "^3.0.5",
     "mui-chips-input": "^7.0.1",
     "mui-tiptap": "^1.28.1",
@@ -40,6 +41,7 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1",
     "recharts": "^3.6.0",
+    "swiper": "^12.0.3",
     "tiptap": "^1.32.2"
   },
   "devDependencies": {
@@ -47,6 +49,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "@types/swiper": "^5.4.3",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",

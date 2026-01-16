@@ -9,6 +9,7 @@ import { formatearMoneda } from "../../types/DocumentosInterface";
 import { getCategoriaDisplay } from "../../types/CategoriasInterface";
 import CartActions from "../common/CartActions";
 import StorageIcon from '@mui/icons-material/Storage';
+import ImageCarouselContainer from "../common/ImageCarouselContainer";
 
 export interface ArticuloModalRef {
     showModal: (publicacionId: number) => void;
@@ -231,14 +232,10 @@ return(
 
         <CustomTabPanel  value={currentTab} index={0}>
         <Stack direction="row" spacing={2} sx={{mb:2}}>
-                <Box sx={{width: 420, height: 450, minWidth: 420, overflowY: 'auto'}}>
+                <Box sx={{width: 420, height: 480, minWidth: 420, overflowY: 'auto'}}>
             <ImageList cols={1}>
-                {publicacion?.imagenes && publicacion.imagenes.length > 0 ? (
-                    publicacion.imagenes.map((_imgUrl, index) => (
-                        <ImageListItem key={index}>
-                            <ImageContainer publicacion={publicacion} numero={index} width={400} height={400}></ImageContainer>
-                        </ImageListItem>
-                    ))
+                {publicacion?.imagenes && publicacion.imagenes.length > 1 ? (
+                    <ImageCarouselContainer publicacion={publicacion} width={400} height={400}></ImageCarouselContainer>
                 ) : (
                     <ImageListItem>
                        {publicacion &&(<ImageContainer publicacion={publicacion} numero={0} width={400} height={400}></ImageContainer>)} 

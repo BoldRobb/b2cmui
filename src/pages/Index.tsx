@@ -9,7 +9,6 @@ import { useColorScheme } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppTheme from '../assets/shared-theme/AppTheme';
-import LoginCard from '../components/forms/LoginCard';
 import Content from '../components/LoginContent';
 import FacturaBuscarCard from '../components/forms/FacturaBuscarCard';
 
@@ -95,11 +94,6 @@ export default function Home(props: { disableCustomTheme?: boolean }) {
         >
           <Content />
           <Box sx={{ position: 'relative', minWidth: { sm: '450px' }, minHeight: '400px', display: 'flex', alignItems: 'center' }}>
-            <Fade in={!showFacturaCard} timeout={500} unmountOnExit>
-              <Box sx={{ position: 'absolute', top: '50%', left: 0, right: 0, transform: 'translateY(-50%)' }}>
-                <LoginCard onLoginSuccess={() => setShowFacturaCard(true)} />
-              </Box>
-            </Fade>
             <Fade in={showFacturaCard} timeout={500} unmountOnExit>
               <Box sx={{ position: 'absolute', top: '50%', left: 0, right: 0, transform: 'translateY(-50%)' }}>
                 <FacturaBuscarCard onBack={() => setShowFacturaCard(false)} />

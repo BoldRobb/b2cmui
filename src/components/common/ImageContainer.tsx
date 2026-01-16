@@ -22,7 +22,6 @@ export default function ImageContainer( {
         publicacion?.id, 
         publicacion?.imagenes?.[numero]
     );
-    console.log( publicacion?.imagenes?.[0]);
     if (!publicacion || !publicacion.imagenes || publicacion.imagenes.length === 0) {
         return (
             <div
