@@ -171,7 +171,7 @@ const [searchParams] = useSearchParams();
               {(()=>{
 
                 const ROW_HEIGHT = 48; 
-                const MAX_HEIGHT = 180; 
+                const MAX_HEIGHT = 280; 
                 const needsScroll = factura.factura?.partidas?.length ? factura.factura.partidas.length * ROW_HEIGHT > MAX_HEIGHT : false;
                 return (
                     <TableContainer sx={{mb:'24px',maxHeight: needsScroll ? MAX_HEIGHT : 'auto'}}>

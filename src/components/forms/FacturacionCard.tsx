@@ -1,4 +1,4 @@
-import {Card, Divider, Stack, Typography, FormControl, FormLabel, FormHelperText, TextField, Select, InputAdornment, FormControlLabel, Checkbox, Button, Box, Grid, MenuItem } from '@mui/material';
+import {Card, Divider, Stack, Typography, FormControl, FormLabel, FormHelperText, TextField, Select, InputAdornment, FormControlLabel, Checkbox, Button, Box, Grid, MenuItem, CircularProgress } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import type { FormularioFacturarModel, MetadatosFacturacionBuscada, FormularioFacturar } from '../../types/FacturacionInterface';
@@ -593,10 +593,10 @@ export default function FacturacionCard({metadatos, formulario}: FacturacionCard
                   <Button 
                     type="submit" 
                     variant="outlined" 
-                    startIcon={<MonetizationOnIcon />}
-                    disabled={!formValues.verificacionChecked}
+                    startIcon={loading ? <CircularProgress size={20} /> : <MonetizationOnIcon />}
+                    disabled={!formValues.verificacionChecked || loading}
                   >
-                    Facturar
+                    {loading ? 'Generando factura...' : 'Facturar'}
                   </Button>
                 </Box>
             </Stack>

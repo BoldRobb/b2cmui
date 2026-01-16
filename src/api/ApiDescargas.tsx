@@ -89,7 +89,6 @@ class ApiDescargas{
         tipoDescarga: string
     ): Promise<Blob> {
         const url = `${this.baseUrl}/publico/${tipoDocumento}/${documentoId}/${tipoDescarga}`;
-        
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -141,7 +140,6 @@ class ApiDescargas{
         tipoDescarga: string,
         filename?: string
     ): Promise<void> {
-        console.log('Iniciando descarga del documento...');
         const loadingKey = notificationService.loading('Iniciando descarga...');
         try {
             const blob = await this.descargarDocumento(tipoDocumento, documentoId, tipoDescarga);
@@ -185,14 +183,16 @@ class ApiDescargas{
     async descargarYGuardarDocumentoPublico(
         tipoDocumento: string, 
         documentoId: number, 
-        tipoDescarga: string,
         documentoFolio: string,
+        tipoDescarga: string,
         filename?: string
     ): Promise<void> {
+        const loadingKey = notificationService.loading('Iniciando descarga...');
         try {
             const blob = await this.descargarDocumentoPublico(tipoDocumento, documentoId, tipoDescarga);
             const defaultFilename = filename || `${documentoFolio}.${tipoDescarga.toLowerCase()}`;
             ApiDescargas.downloadBlob(blob, defaultFilename);
+            notificationService.close(loadingKey);
             notificationService.success('Documento descargado correctamente');
         } catch (error) {
             console.error('Error descargando documento público:', error);

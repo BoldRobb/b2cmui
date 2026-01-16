@@ -1,40 +1,13 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Fade from '@mui/material/Fade';
 import Box from '@mui/material/Box';
-import { useColorScheme } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppTheme from '../assets/shared-theme/AppTheme';
 import Content from '../components/LoginContent';
 import FacturaBuscarCard from '../components/forms/FacturaBuscarCard';
 
-const ColorModeSwitch = () => {
-  const { mode, setMode } = useColorScheme();
-  const handleToggle = () => {
-    setMode(mode === 'light' ? 'dark' : 'light');
-  };
-
-  return (
-    <IconButton 
-      onClick={handleToggle}
-      sx={{
-        position: 'fixed',
-        top: '1rem',
-        right: '1rem',
-        borderRadius: 2,
-        border: 1,
-        borderColor: 'divider',
-        color: mode === 'dark' ? 'common.white' : 'common.black',
-      }}
-    >
-      {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-    </IconButton>
-  );
-};
 
 export default function Home(props: { disableCustomTheme?: boolean }) {
   const location = useLocation();
@@ -52,7 +25,6 @@ export default function Home(props: { disableCustomTheme?: boolean }) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <ColorModeSwitch />
       <Stack
         direction="column"
         component="main"
